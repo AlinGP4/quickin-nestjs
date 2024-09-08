@@ -60,7 +60,7 @@ export class CategoriesService {
 
         try {
             const insertedCategory = await this.categoryRepository.insert(category);
-            return responseSusses('', insertedCategory.identifiers);
+            return responseSusses('', insertedCategory.identifiers[0]);
         } catch (error) {
             return responseError('Error creating category', {})
         }

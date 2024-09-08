@@ -90,16 +90,21 @@ export class ProductsService {
      */
     async createProduct(product: NewProductDto) {
         try {
-            const category = await this.categoryRepository.findOne({ where: { id: product.idCategory } });
-            if (!category) return responseError('Category not exist', {}, 404)
-            
+            let category = null;
+
+            if (product.idCategory != -1) {
+                category = await this.categoryRepository.findOne({ where: { id: product.idCategory } });
+                if (!category) return responseError('Category not exist', {}, 404)
+            }
+
             const newProduct = new Product();
             newProduct.name = product.name;
             newProduct.description = product.description;
+            newProduct.price = product.price;
             newProduct.category = category;
 
             const insertedProduct = await this.productRepository.insert(newProduct);
-            return insertedProduct ? responseSusses('', insertedProduct.identifiers) : responseError('Product not exist', {}, 404);
+            return insertedProduct ? responseSusses('', insertedProduct.identifiers[0]) : responseError('Product not exist', {}, 404);
         } catch (error) {
             return responseError('Error creating product', {})
         }
@@ -116,13 +121,25 @@ export class ProductsService {
      */
     async updateProduct(product: UpdateProductDto) {
         try {
-            const dbProduct = await this.productRepository.findOne({ where: { id: product.id } });
+            const dbProduct = await this.productRepository.findOne({ where: { id: product.id }, relations: {category: true}});
+
             if (!dbProduct) {
                 return responseError('Product not exist', {}, 404)
             }
+
+            let category = null;
+
+            if (product.idCategory != -1) {
+                category = await this.categoryRepository.findOne({ where: { id: product.idCategory } });
+                if (!category) return responseError('Category not exist', {}, 404)
+            }
+
             if (product.name) dbProduct.name = product.name;
             if (product.description) dbProduct.description = product.description;
-            const savedProduct = await this.productRepository.save(product);
+            if (product.idCategory) dbProduct.category = category;
+            if (product.price) dbProduct.price = product.price;
+
+            const savedProduct = await this.productRepository.save(dbProduct);
             return responseSusses('', savedProduct);
         } catch (err) {
             return responseError('Error update product', {})

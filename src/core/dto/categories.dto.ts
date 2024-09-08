@@ -6,7 +6,6 @@ export class NewCategoryDto {
     @ApiProperty()
     name: string;
 
-    @IsNotEmpty()
     @ApiPropertyOptional()
     description: string;
 }

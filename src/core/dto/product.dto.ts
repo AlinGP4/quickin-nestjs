@@ -6,15 +6,18 @@ export class NewProductDto {
     @ApiProperty()
     name: string;
 
-    @IsNotEmpty()
     @ApiPropertyOptional()
     description: string;
 
-    @IsNotEmpty()
     @ApiPropertyOptional({
         type: Number
     })
     idCategory: number;
+
+    @ApiPropertyOptional({
+        type: Number
+    })
+    price: number;
 }
 
 
@@ -28,6 +31,11 @@ export class UpdateProductDto {
 
     @ApiPropertyOptional()
     description: string;
+
+    @ApiPropertyOptional({
+        type: Number
+    })
+    price: number;
 
     @ApiPropertyOptional({
         type: Number
