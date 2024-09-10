@@ -14,7 +14,7 @@ export class Category {
 
     @OneToMany(() => Product, (products) => products.category, {
         cascade: true,
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
     })
     products: Product[]
 }

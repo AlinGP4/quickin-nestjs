@@ -121,7 +121,7 @@ export class ProductsService {
      */
     async updateProduct(product: UpdateProductDto) {
         try {
-            const dbProduct = await this.productRepository.findOne({ where: { id: product.id }, relations: {category: true}});
+            const dbProduct = await this.productRepository.findOne({ where: { id: product.id }, relations: { category: true } });
 
             if (!dbProduct) {
                 return responseError('Product not exist', {}, 404)

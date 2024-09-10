@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Category } from './category.entity';
 
 @Entity()
@@ -18,5 +18,6 @@ export class Product {
     @ManyToOne(() => Category, {
         onDelete: 'CASCADE'
     })
+    @JoinColumn({ name: 'category_id' })
     category: Category;
 }
